@@ -1,7 +1,7 @@
 console.log(4)
 
 state = {
-  text: '',
+  text: 'console.log(4)',
   designations: [
     { id: 1, start: 0, end: 7, text: 'console', kind: 'identifier', role: 'property source provider', color: '#8ed6f3' },
     { id: 2, start: 0, end: 11, text: 'console.log', kind: 'property reading expression', role: 'method provider', color: '' },
