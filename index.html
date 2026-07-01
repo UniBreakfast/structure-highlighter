@@ -16,7 +16,29 @@
 </head>
 
 <body id="body">
-  
+  <main>
+    <form action="javascript:">
+      <button value="edit">Edit</button>
+
+      <textarea name="text" readonly hidden></textarea>
+      
+      <pre><code></code></pre>
+    </form>
+  </main>
+
+  <template title="edit">
+    <dialog>
+      <form method="dialog">
+        <input type="hidden" name="id">
+        <textarea name="text"></textarea>
+
+        <div>
+          <button value="update">Update</button>
+          <button value="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+  </template>
 </body>
 
 </html>

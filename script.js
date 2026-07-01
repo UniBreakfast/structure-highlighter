@@ -4,13 +4,35 @@ const state = {
   designations: []
 }
 
-const mainView = document.querySelector('pre')
+const templates = {}
+const mainView = document.querySelector('main')
 
 body.onclick = handleClick
 
+prepareTemplates()
 loadDesignations()
 loadExampleState() // TODO: remove
-render(mainView)
+fill(mainView, state)
+
+function fill(view, state) {
+  const markup = stateToMarkup(state)
+  const form = view.querySelector('form')
+  const code = view.querySelector('code')
+
+  form.text.value = state.text
+  code.innerHTML = markup
+}
+
+function prepareTemplates() {
+  const templateElements = document.querySelectorAll('template')
+
+  for (const template of templateElements) {
+    const {title} = template
+
+    templates[title] = template.content.firstElementChild
+    template.remove()
+  }
+}
 
 function loadDesignations() {
   const json = localStorage.getItem(lsKey)
@@ -22,37 +44,38 @@ function saveDesignations() {
   localStorage.setItem(lsKey, JSON.stringify(state))
 }
 
-function render(view, id = null) {
-  let {text, designations} = state
-
-  if (id) {
-    const designation = getDesignation(id)
-    const {start, end} = designation
-
-    text = designation.text
-    designations = designations.filter(
-      d => d.start >= start && d.end <= end
-    )
-  }
-  
-  
-  
-   
+function render(view, markup) {
+  view.innerHTML = markup
 }
 
 function handleClick(e) {
-  if (e.target.matches('button.edit')) return handleEdit(e)
+  if (!e.target.matches('button')) return
+
+  const btn = e.target
+
+  if (btn.value === 'edit') return handleEdit(e)
 }
 
 function handleEdit(e) {
   const form = e.target.closest('form')
   const id = form.id?.value
+  const text = form.text?.value
+  const props = { id, text, form }
 
-  if (!id) return showDialog('edit', { text: state.text })
+  showDialog('edit', props)
+}
 
-  const { text } = getDesignation(id)
+function showDialog(type, props) {
+  const dialog = templates[type].cloneNode(true)
 
-  showDialog('edit', { id, text })
+  if (type == 'edit') {
+    const form = dialog.querySelector('form')
+
+    if (props.id) form.id.value = props.id
+    if (props.text) form.text.value = props.text
+  }
+
+  document.body.appendChild(dialog).showModal()
 }
 
 function loadExampleState() {
@@ -138,5 +161,3 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
 }
-
-console.log(stateToMarkup(state))
