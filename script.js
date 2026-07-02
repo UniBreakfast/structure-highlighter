@@ -111,7 +111,8 @@ function stateToMarkup(state) {
       const lenA = a.end - a.start
       const lenB = b.end - b.start
 
-      if (lenA !== lenB) return lenB - lenA
+      if (lenA != lenB) return lenB - lenA
+
       return a.id - b.id
     })
   }
@@ -121,7 +122,8 @@ function stateToMarkup(state) {
       const lenA = a.end - a.start
       const lenB = b.end - b.start
 
-      if (lenA !== lenB) return lenA - lenB
+      if (lenA != lenB) return lenA - lenB
+
       return b.id - a.id
     })
   }
@@ -133,9 +135,7 @@ function stateToMarkup(state) {
       for (const d of opens.get(i)) {
         html += `<span dsgn-id="${d.id}"`
 
-        if (d.color) {
-          html += ` style="color: ${d.color}"`
-        }
+        if (d.color) html += ` style="color: ${d.color}"`
 
         html += '>'
       }
@@ -160,4 +160,35 @@ function escapeHtml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+}
+
+function getSelectedFragment(selection) {
+  const range = selection.getRangeAt(0)
+  const text = selection.toString()
+  const code = range.commonAncestorContainer.closest('code')
+  const form = code.closest('form')
+  const id = form.id?.value
+
+  if (!code) return null
+
+  let start = calcOffset(code, range.startContainer, range.startOffset)
+  let end = calcOffset(code, range.endContainer, range.endOffset)
+
+  if (id) {
+    const designation = state.designations.find(d => d.id == id)
+
+    start += designation.start
+    end += designation.end
+  }
+  
+  return {text, start, end}
+}
+
+function calcOffset(startNode, node, nodeOffset) {
+  const range = document.createRange()
+
+  range.setStart(startNode, 0)
+  range.setEnd(node, nodeOffset)
+  
+  return range.toString().length
 }
