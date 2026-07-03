@@ -51,7 +51,7 @@ function handleClick(e) {
     if (btn.value === 'edit') return handleEdit(e)
   }
 
-  if (e.target.matches('code span')) {
+  if (e.target.matches(':not(button)>pre span')) {
     const span = e.target
     const ids = getDesignationIds(span)
     const setsOfData = ids.map(getSetOfData)
@@ -138,7 +138,7 @@ function loadExampleState() {
 }
 
 function setOfDataToMarkup(state) {
-  const { text, designations } = state
+  const { id, text, designations } = state
 
   const opens = new Map()
   const closes = new Map()
@@ -174,8 +174,9 @@ function setOfDataToMarkup(state) {
   }
 
   let html = ''
+  let start = !id ? 0 : designations.find(d => d.id == id).start
 
-  for (let i = 0; i <= text.length; i++) {
+  for (let i = start; i <= start + text.length; i++) {
     if (opens.has(i)) {
       for (const d of opens.get(i)) {
         html += `<span data-id="${d.id}"`
@@ -186,8 +187,8 @@ function setOfDataToMarkup(state) {
       }
     }
 
-    if (i < text.length) {
-      html += escapeHtml(text[i])
+    if (i - start < text.length) {
+      html += escapeHtml(text[i - start])
     }
 
     if (closes.has(i + 1)) {
