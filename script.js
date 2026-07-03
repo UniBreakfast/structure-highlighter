@@ -14,12 +14,12 @@ loadDesignations()
 loadExampleState() // TODO: remove
 fill(mainView, state)
 
-function fill(view, state) {
-  const markup = stateToMarkup(state)
+function fill(view, data) {
+  const markup = setOfDataToMarkup(data)
   const form = view.querySelector('form')
   const code = view.querySelector('code')
 
-  form.text.value = state.text
+  form.text.value = data.text
   code.innerHTML = markup
 }
 
@@ -27,7 +27,7 @@ function prepareTemplates() {
   const templateElements = document.querySelectorAll('template')
 
   for (const template of templateElements) {
-    const {title} = template
+    const { title } = template
 
     templates[title] = template.content.firstElementChild
     template.remove()
@@ -44,16 +44,43 @@ function saveDesignations() {
   localStorage.setItem(lsKey, JSON.stringify(state))
 }
 
-function render(view, markup) {
-  view.innerHTML = markup
+function handleClick(e) {
+  if (e.target.matches('button')) {
+    const btn = e.target
+
+    if (btn.value === 'edit') return handleEdit(e)
+  }
+
+  if (e.target.matches('code span')) {
+    const span = e.target
+    const ids = getDesignationIds(span)
+    const setsOfData = ids.map(getSetOfData)
+    const props = { setsOfData }
+    
+    return showDialog('select', props)
+  }
 }
 
-function handleClick(e) {
-  if (!e.target.matches('button')) return
+function getDesignationIds(span) {
+  const ids = []
 
-  const btn = e.target
+  while (span.matches('span')) {
+    ids.push(span.dataset.id)
+    span = span.parentElement
+  }
 
-  if (btn.value === 'edit') return handleEdit(e)
+  return ids
+}
+
+function getSetOfData(id) {
+  const designation = state.designations.find(d => d.id == id)
+  const {text, start, end} = designation
+  const designations = state.designations.filter(
+    d => d.start >= start && d.end <= end
+  )
+  const data = {id, text, designations}
+  
+  return data
 }
 
 function handleEdit(e) {
@@ -73,9 +100,27 @@ function showDialog(type, props) {
 
     if (props.id) form.id.value = props.id
     if (props.text) form.text.value = props.text
+
+  } else if (type == 'select') {
+    const form = dialog.querySelector('form')
+    const designationList = dialog.querySelector('ul')
+    const items = props.setsOfData.map(makeDesignationItem)
+
+    designationList.replaceChildren(...items)
   }
 
   document.body.appendChild(dialog).showModal()
+}
+
+function makeDesignationItem(data) {
+  const item = templates['designation'].cloneNode(true)
+  const btn = item.querySelector('button')
+  const code = btn.querySelector('code')
+
+  btn.value = data.id
+  code.innerHTML = setOfDataToMarkup(data)
+  
+  return item
 }
 
 function loadExampleState() {
@@ -92,7 +137,7 @@ function loadExampleState() {
   ]
 }
 
-function stateToMarkup(state) {
+function setOfDataToMarkup(state) {
   const { text, designations } = state
 
   const opens = new Map()
@@ -133,7 +178,7 @@ function stateToMarkup(state) {
   for (let i = 0; i <= text.length; i++) {
     if (opens.has(i)) {
       for (const d of opens.get(i)) {
-        html += `<span dsgn-id="${d.id}"`
+        html += `<span data-id="${d.id}"`
 
         if (d.color) html += ` style="color: ${d.color}"`
 
@@ -180,8 +225,8 @@ function getSelectedFragment(selection) {
     start += designation.start
     end += designation.end
   }
-  
-  return {text, start, end}
+
+  return { text, start, end }
 }
 
 function calcOffset(startNode, node, nodeOffset) {
@@ -189,6 +234,6 @@ function calcOffset(startNode, node, nodeOffset) {
 
   range.setStart(startNode, 0)
   range.setEnd(node, nodeOffset)
-  
+
   return range.toString().length
 }

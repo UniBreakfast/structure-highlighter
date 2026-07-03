@@ -1,0 +1,5 @@
+code span:hover:not(:has(:hover)) {
+  outline: 1px solid orange;
+  border-radius: 3px;
+  cursor: pointer;
+}
