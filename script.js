@@ -7,15 +7,17 @@ const state = {
 const templates = {}
 const mainView = document.querySelector('main')
 
-body.onclick = handleClick
-
 prepareTemplates()
+
+body.onclick = handleClick
+templates.select.onsubmit = handleSelect
+
 loadDesignations()
 loadExampleState() // TODO: remove
 fill(mainView, state)
 
 function fill(view, data) {
-  const markup = setOfDataToMarkup(data)
+  const markup = subStateToMarkup(data)
   const form = view.querySelector('form')
   const code = view.querySelector('code')
 
@@ -45,20 +47,34 @@ function saveDesignations() {
 }
 
 function handleClick(e) {
-  if (e.target.matches('button')) {
+  if (
+    e.target.matches('button')
+  ) {
     const btn = e.target
 
     if (btn.value === 'edit') return handleEdit(e)
-  }
 
-  if (e.target.matches(':not(button)>pre span')) {
+  } else if (
+    e.target.matches(':not(button)>pre span')
+  ) {
     const span = e.target
     const ids = getDesignationIds(span)
-    const setsOfData = ids.map(getSetOfData)
-    const props = { setsOfData }
-    
-    return showDialog('select', props)
+    const subStates = ids.map(getSubState)
+
+    return showDialog('select', { subStates })
   }
+}
+
+function handleSelect(e) {
+  const form = e.target
+  const btn = e.submitter
+
+  if (btn.value === 'cancel') return
+
+  const id = btn.value
+  const subState = getSubState(id)
+
+  showDialog('sub-view', { subState })
 }
 
 function getDesignationIds(span) {
@@ -72,14 +88,14 @@ function getDesignationIds(span) {
   return ids
 }
 
-function getSetOfData(id) {
+function getSubState(id) {
   const designation = state.designations.find(d => d.id == id)
-  const {text, start, end} = designation
+  const { text, start, end } = designation
   const designations = state.designations.filter(
     d => d.start >= start && d.end <= end
   )
-  const data = {id, text, designations}
-  
+  const data = { id, text, designations }
+
   return data
 }
 
@@ -87,26 +103,36 @@ function handleEdit(e) {
   const form = e.target.closest('form')
   const id = form.id?.value
   const text = form.text?.value
-  const props = { id, text, form }
 
-  showDialog('edit', props)
+  showDialog('edit', { id, text, form })
 }
 
 function showDialog(type, props) {
-  const dialog = templates[type].cloneNode(true)
+  let dialog = templates[type]
 
   if (type == 'edit') {
+    const { id, text } = props
+
+    dialog = dialog.cloneNode(true)
+
     const form = dialog.querySelector('form')
 
-    if (props.id) form.id.value = props.id
-    if (props.text) form.text.value = props.text
+    if (id) form.id.value = id
+    if (text) form.text.value = text
 
   } else if (type == 'select') {
+    const { subStates } = props
     const form = dialog.querySelector('form')
     const designationList = dialog.querySelector('ul')
-    const items = props.setsOfData.map(makeDesignationItem)
+    const items = subStates.map(makeDesignationItem)
 
     designationList.replaceChildren(...items)
+
+  } else if (type == 'sub-view') {
+    const { subState } = props
+
+    dialog = dialog.cloneNode(true)
+    fill(dialog, subState)
   }
 
   document.body.appendChild(dialog).showModal()
@@ -118,8 +144,8 @@ function makeDesignationItem(data) {
   const code = btn.querySelector('code')
 
   btn.value = data.id
-  code.innerHTML = setOfDataToMarkup(data)
-  
+  code.innerHTML = subStateToMarkup(data)
+
   return item
 }
 
@@ -137,7 +163,7 @@ function loadExampleState() {
   ]
 }
 
-function setOfDataToMarkup(state) {
+function subStateToMarkup(state) {
   const { id, text, designations } = state
 
   const opens = new Map()

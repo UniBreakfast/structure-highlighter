@@ -18,13 +18,34 @@
 <body id="body">
   <main>
     <form action="javascript:">
-      <button value="edit">Edit</button>
-
       <textarea name="text" readonly hidden></textarea>
+      
+      <button value="edit">Edit</button>
       
       <pre><code></code></pre>
     </form>
   </main>
+
+  <template title="sub-view">
+    <dialog>
+      <form method="dialog">
+        <input type="hidden" name="id">
+        <textarea name="text" readonly hidden></textarea>
+
+        <div>
+          <button value="edit">Edit</button>
+          <button value="delete">Delete</button>
+        </div>
+
+        <pre><code></code></pre>
+        
+        <div>
+          <button value="cancel">Cancel</button>
+        </div>
+
+      </form>
+    </dialog>
+  </template>
 
   <template title="edit">
     <dialog>
