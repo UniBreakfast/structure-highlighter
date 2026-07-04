@@ -9,10 +9,11 @@ const mainView = document.querySelector('main')
 
 prepareTemplates()
 
-body.onclick = handleClick
 templates.select.onsubmit = handleSelect
 templates.designate.onchange = handleToggleColor
 templates.designate.onsubmit = handleDesignate
+
+body.onclick = handleClick
 
 loadDesignations()
 // loadExampleState() // TODO: remove
@@ -73,6 +74,10 @@ function handleClick(e) {
   } else if (
     e.target.matches(':not(button)>pre span')
   ) {
+    const selection = getSelection()
+
+    if (!selection.isCollapsed) return
+
     const span = e.target
     const ids = getDesignationIds(span)
     const subStates = ids.map(getSubState)
