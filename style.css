@@ -29,3 +29,7 @@ pre {
   border-radius: 3px;
   cursor: pointer;
 }
+
+[type=color]:disabled {
+  opacity: 0.3;
+}

@@ -20,7 +20,10 @@
     <form action="javascript:">
       <textarea name="text" readonly hidden></textarea>
       
-      <button value="edit">Edit</button>
+      <div>
+        <button value="edit">Edit</button>
+        <button value="designate">Designate selected</button>
+      </div>
       
       <pre><code></code></pre>
     </form>
@@ -43,6 +46,45 @@
           <button value="cancel">Cancel</button>
         </div>
 
+      </form>
+    </dialog>
+  </template>
+
+  <template title="designate">
+    <dialog>
+      <form method="dialog">
+        <input type="hidden" name="start">
+        <input type="hidden" name="end">
+        <textarea name="text" hidden></textarea>
+        
+        <pre><code></code></pre>
+
+        <div>
+          <label>
+            <span>Kind:</span>
+            <input name="kind">
+          </label>
+        </div>
+
+        <div>
+          <label>
+            <span>Role:</span>
+            <input name="role">
+          </label>
+        </div>
+
+        <div>
+          <label>
+            <input type="checkbox" name="colored">
+            <span>Color:</span>
+            <input type="color" name="color" disabled>
+          </label>
+        </div>
+
+        <div>
+          <button value="create">Create designation</button>
+          <button value="cancel">Cancel</button>
+        </div>
       </form>
     </dialog>
   </template>
