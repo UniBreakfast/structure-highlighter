@@ -17,7 +17,7 @@ body.onchange = handleToggleColor
 body.onclick = handleClick
 
 loadDesignations()
-loadExampleState() // TODO: remove
+// loadExampleState() // TODO: remove
 // loadEmptyState() // TODO: remove
 fill(mainView, state)
 
