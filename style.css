@@ -24,7 +24,7 @@ pre {
   color: white
 }
 
-:not(button)>pre span:hover:not(:has(:hover)) {
+:not(button)>pre span:hover:not(:has(:hover)):not(dialog .top) {
   outline: 1px solid orange;
   border-radius: 3px;
   cursor: pointer;

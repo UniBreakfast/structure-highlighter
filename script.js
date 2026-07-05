@@ -21,13 +21,21 @@ loadDesignations()
 fill(mainView, state)
 
 function fill(view, subState) {
+  const {id, text} = subState
   const markup = subStateToMarkup(subState)
   const form = view.querySelector('form')
   const code = view.querySelector('code')
 
-  form.id.value = subState.id || ''
-  form.text.value = subState.text
+  form.id.value = id || ''
+  form.text.value = text
   code.innerHTML = markup
+
+  if (id) {
+    const {kind, role} = 
+      subState.designations.find(d => d.id == id)
+    
+    form.kindrole.value = [kind, role].filter(Boolean).join(', ')
+  }
 }
 
 function prepareTemplates() {
@@ -79,6 +87,9 @@ function handleClick(e) {
     if (!selection.isCollapsed) return
 
     const span = e.target
+
+    if (span.matches('.top')) return
+    
     const ids = getDesignationIds(span)
     const subStates = ids.map(getSubState)
 
@@ -135,7 +146,17 @@ function handleCreate(e) {
 
   const { text, start, end } = fragment
 
+  if (wouldConflict(start, end)) return
+
   showDialog('designate', { text, start, end })
+}
+
+function wouldConflict(start, end) {
+  return state.designations.some(d => {
+    return start == d.start && end == d.end
+      || start < d.start && end > d.start && end < d.end
+      || start > d.start && start < d.end && end > d.end
+  })
 }
 
 function getDesignationIds(span) {
@@ -264,6 +285,7 @@ function subStateToMarkup(state) {
       for (const d of opens.get(i)) {
         html += `<span data-id="${d.id}"`
 
+        if (d.start == start && d.end == start + text.length) html += ` class="top"`
         if (d.color) html += ` style="color: ${d.color}"`
 
         html += '>'
