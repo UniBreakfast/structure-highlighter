@@ -9,14 +9,15 @@ const mainView = document.querySelector('main')
 
 prepareTemplates()
 
+templates.edit.onsubmit = handleUpdate
 templates.select.onsubmit = handleSelect
-templates.designate.onchange = handleToggleColor
 templates.designate.onsubmit = handleDesignate
 
+body.onchange = handleToggleColor
 body.onclick = handleClick
 
 loadDesignations()
-// loadExampleState() // TODO: remove
+loadExampleState() // TODO: remove
 // loadEmptyState() // TODO: remove
 fill(mainView, state)
 
@@ -95,6 +96,80 @@ function handleClick(e) {
 
     return showDialog('select', { subStates })
   }
+}
+
+function handleEdit(e) {
+  const form = e.target.closest('form')
+  const id = form.id?.value
+  const text = form.text?.value
+  const designation = state.designations.find(d => d.id == id)
+  const {kind, role, color} = designation || {}
+
+  showDialog('edit', { id, text, kind, role, color })
+}
+
+function handleUpdate(e) {
+  const btn = e.submitter
+
+  if (btn.value != 'update') return
+
+  const form = e.target
+  const id = form.id.value
+  const text = form.text.value
+  const {designations} = state
+
+  if (id) {
+    const designation = designations.find(d => d.id == id)
+
+    designation.kind = form.kind.value
+    designation.role = form.role.value
+    designation.color = 
+      form.colored.checked ? form.color.value : ''
+
+    if (text == designation.text) {
+      saveDesignations()
+      fill(mainView, state)
+
+      return
+    }
+    
+    const {start, end} = designation
+    const shift = text.length - designation.text.length
+
+    for (let i = designations.length - 1; i >= 0; i--) {
+      const d = designations[i]
+
+      if (d.start >= start && d.end <= end && (d.start != start || d.end != end)) {
+        designations.splice(i, 1)
+      }
+    }
+
+    for (const d of designations) {
+      if (d.start >= end) {
+        d.start += shift
+        d.end += shift
+      } else if (d.end >= end) {
+        d.end += shift
+      }
+    }
+    
+    state.text = 
+      state.text.slice(0, start) + text + state.text.slice(end)
+
+    for (let i = designations.length - 1; i >= 0; i--) {
+      const d = designations[i]
+
+      d.text = state.text.slice(d.start, d.end)
+      
+      if (!d.text) designations.splice(i, 1)
+    }
+  } else {
+    state.text = text
+    state.designations = []
+  }
+
+  saveDesignations()
+  fill(mainView, state)
 }
 
 function handleDelete(e) {
@@ -181,26 +256,22 @@ function getSubState(id) {
   return data
 }
 
-function handleEdit(e) {
-  const form = e.target.closest('form')
-  const id = form.id?.value
-  const text = form.text?.value
-
-  showDialog('edit', { id, text, form })
-}
-
 function showDialog(type, props) {
   let dialog = templates[type]
 
   if (type == 'edit') {
-    const { id, text } = props
-
-    dialog = dialog.cloneNode(true)
-
+    const { id, text, kind, role, color } = props
     const form = dialog.querySelector('form')
 
     if (id) form.id.value = id
-    if (text) form.text.value = text
+    else form.id.removeAttribute('value')
+    
+    form.text.value = text || ''
+    form.kind.value = kind || ''
+    form.role.value = role || ''
+    form.colored.checked = !!color
+    form.color.disabled = !color
+    form.color.value = color || ''
 
   } else if (type == 'select') {
     const { subStates } = props
@@ -214,6 +285,7 @@ function showDialog(type, props) {
     const { subState } = props
 
     dialog = dialog.cloneNode(true)
+    dialog.onclose = () => dialog.remove()
     fill(dialog, subState)
 
   } else if (type == 'designate') {
@@ -230,13 +302,17 @@ function showDialog(type, props) {
   document.body.appendChild(dialog).showModal()
 }
 
-function makeDesignationItem(data) {
+function makeDesignationItem(subState) {
   const item = templates['designation'].cloneNode(true)
   const btn = item.querySelector('button')
   const code = btn.querySelector('code')
+  const { id } = subState
+  const designation = state.designations.find(d => d.id == id)
+  const { kind, role } = designation
 
-  btn.value = data.id
-  code.innerHTML = subStateToMarkup(data)
+  btn.value = id
+  btn.title = [kind, role].filter(Boolean).join(', ')
+  code.innerHTML = subStateToMarkup(subState)
 
   return item
 }

@@ -30,6 +30,10 @@ pre {
   cursor: pointer;
 }
 
+[name=id]:not([value])~div:has(label):has(~div>[value=update]) {
+  display: none;
+}
+
 [type=color]:disabled {
   opacity: 0.3;
 }
