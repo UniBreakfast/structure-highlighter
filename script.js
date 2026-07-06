@@ -30,12 +30,17 @@ const palette = {
 const templates = {}
 const mainView = document.querySelector('main')
 
+let currentItem = null
+
 prepareTemplates()
 
+onmousemove = () => currentItem = null
 templates.edit.onsubmit = handleUpdate
 templates.select.onsubmit = handleSelect
 templates.designate.onsubmit = handleDesignate
 templates.labels.onclick = handleAddToPalette
+templates.labels.onkeydown = handleAdjustPalette
+templates.labels.oncontextmenu = handleRemoveFromPalette
 
 body.onchange = handleToggleColor
 body.onclick = handleClick
@@ -80,7 +85,7 @@ function preparePalette(list, key) {
   list.replaceChildren(...items)
   list.classList.toggle('colors', key == 'colors')
   input.type = key == 'colors' ? 'color' : 'text'
-  input.value = ''
+  input.value = key == 'colors' ? '#ffffff' : ''
 }
 
 function prepareTemplates() {
@@ -307,6 +312,47 @@ function handleAddToPalette(e) {
   savePalette()
   preparePalette(list, key)
   form.reset()
+}
+
+function handleAdjustPalette(e) {
+  const dialog = e.currentTarget
+  const item = currentItem || dialog.querySelector('li:has(:hover)')
+
+  if (!item || e.key != 'ArrowUp' && e.key != 'ArrowDown') return
+
+  const form = item.closest('form')
+  const list = form.querySelector('ul')
+  const key = form.key.value
+  const arr = palette[key]
+  const items = Array.from(list.children)
+  const i = items.indexOf(item)
+  const j = e.key == 'ArrowUp' ? i - 1 : i + 1
+
+  if (!(j in arr)) return
+
+  [arr[i], arr[j]] = [arr[j], arr[i]]
+  
+  preparePalette(list, key)
+  savePalette()
+  dialog.focus()
+  currentItem = list.children[j]
+}
+
+function handleRemoveFromPalette(e) {
+  if (!e.target.matches('li>button')) return
+
+  const item = e.target.closest('li')
+  const form = item.closest('form')
+  const list = form.querySelector('ul')
+  const key = form.key.value
+  const arr = palette[key]
+  const i = Array.from(list.children).indexOf(item)
+
+  arr.splice(i, 1)
+  preparePalette(list, key)
+  savePalette()
+  currentItem = null
+  e.preventDefault()
 }
 
 function wouldConflict(start, end) {
