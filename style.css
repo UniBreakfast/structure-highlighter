@@ -37,3 +37,18 @@ pre {
 [type=color]:disabled {
   opacity: 0.3;
 }
+
+.colors {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 5px;
+}
+
+.colors>li>button {
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  color: var(--color);
+  background: var(--color);
+  --color: attr(value type(<color>));
+}

@@ -1,7 +1,30 @@
-const lsKey = 'sh-state'
+const lsKey1 = 'sh-state'
+const lsKey2 = 'sh-palette'
 const state = {
   text: '',
   designations: []
+}
+const palette = {
+  kinds: [
+    'identifier',
+    'property reading expression',
+    'method reading expression',
+  ],
+  roles: [
+    'property source provider',
+    'property name provider',
+    'property accessor',
+    'method provider',
+    'method invoker',
+  ],
+  colors: [
+    '#8ed6f3',
+    '#fce44b',
+    '#24ff37',
+    '#8ed6f3',
+    '#8ed6f3',
+    '#8ed6f3',
+  ]
 }
 
 const templates = {}
@@ -12,17 +35,19 @@ prepareTemplates()
 templates.edit.onsubmit = handleUpdate
 templates.select.onsubmit = handleSelect
 templates.designate.onsubmit = handleDesignate
+templates.labels.onclick = handleAddToPalette
 
 body.onchange = handleToggleColor
 body.onclick = handleClick
 
+loadPalette()
 loadDesignations()
 // loadExampleState() // TODO: remove
 // loadEmptyState() // TODO: remove
 fill(mainView, state)
 
 function fill(view, subState) {
-  const {id, text} = subState
+  const { id, text } = subState
   const markup = subStateToMarkup(subState)
   const form = view.querySelector('form')
   const code = view.querySelector('code')
@@ -32,11 +57,30 @@ function fill(view, subState) {
   code.innerHTML = markup
 
   if (id) {
-    const {kind, role} = 
+    const { kind, role } =
       subState.designations.find(d => d.id == id)
-    
+
     form.kindrole.value = [kind, role].filter(Boolean).join(', ')
   }
+}
+
+function preparePalette(list, key) {
+  const input = list.parentElement.querySelector('div>input')
+  const labels = palette[key]
+  const items = labels.map(label => {
+    const item = document.createElement('li')
+    const btn = document.createElement('button')
+
+    btn.value = btn.innerText = label
+    item.append(btn)
+
+    return item
+  })
+
+  list.replaceChildren(...items)
+  list.classList.toggle('colors', key == 'colors')
+  input.type = key == 'colors' ? 'color' : 'text'
+  input.value = ''
 }
 
 function prepareTemplates() {
@@ -50,14 +94,24 @@ function prepareTemplates() {
   }
 }
 
+function loadPalette() {
+  const json = localStorage.getItem(lsKey2)
+
+  if (json) Object.assign(palette, JSON.parse(json))
+}
+
+function savePalette() {
+  localStorage.setItem(lsKey2, JSON.stringify(palette))
+}
+
 function loadDesignations() {
-  const json = localStorage.getItem(lsKey)
+  const json = localStorage.getItem(lsKey1)
 
   if (json) Object.assign(state, JSON.parse(json))
 }
 
 function saveDesignations() {
-  localStorage.setItem(lsKey, JSON.stringify(state))
+  localStorage.setItem(lsKey1, JSON.stringify(state))
 }
 
 function handleToggleColor(e) {
@@ -65,9 +119,10 @@ function handleToggleColor(e) {
 
   if (!box.matches(':has(~[type=color])')) return
 
-  const input = box.parentElement.lastElementChild
+  const input = box.nextElementSibling.nextElementSibling
+  const btn = input.nextElementSibling
 
-  input.disabled = !box.checked
+  input.disabled = btn.disabled = !box.checked
 }
 
 function handleClick(e) {
@@ -78,6 +133,7 @@ function handleClick(e) {
 
     if (btn.value == 'edit') return handleEdit(e)
     if (btn.value == 'delete') return handleDelete(e)
+    if (btn.value == 'select') return handleSelectValue(e)
     if (btn.value == 'designate') return handleCreate(e)
 
   } else if (
@@ -90,7 +146,7 @@ function handleClick(e) {
     const span = e.target
 
     if (span.matches('.top')) return
-    
+
     const ids = getDesignationIds(span)
     const subStates = ids.map(getSubState)
 
@@ -103,7 +159,7 @@ function handleEdit(e) {
   const id = form.id?.value
   const text = form.text?.value
   const designation = state.designations.find(d => d.id == id)
-  const {kind, role, color} = designation || {}
+  const { kind, role, color } = designation || {}
 
   showDialog('edit', { id, text, kind, role, color })
 }
@@ -116,14 +172,14 @@ function handleUpdate(e) {
   const form = e.target
   const id = form.id.value
   const text = form.text.value
-  const {designations} = state
+  const { designations } = state
 
   if (id) {
     const designation = designations.find(d => d.id == id)
 
     designation.kind = form.kind.value
     designation.role = form.role.value
-    designation.color = 
+    designation.color =
       form.colored.checked ? form.color.value : ''
 
     if (text == designation.text) {
@@ -132,8 +188,8 @@ function handleUpdate(e) {
 
       return
     }
-    
-    const {start, end} = designation
+
+    const { start, end } = designation
     const shift = text.length - designation.text.length
 
     for (let i = designations.length - 1; i >= 0; i--) {
@@ -152,15 +208,15 @@ function handleUpdate(e) {
         d.end += shift
       }
     }
-    
-    state.text = 
+
+    state.text =
       state.text.slice(0, start) + text + state.text.slice(end)
 
     for (let i = designations.length - 1; i >= 0; i--) {
       const d = designations[i]
 
       d.text = state.text.slice(d.start, d.end)
-      
+
       if (!d.text) designations.splice(i, 1)
     }
   } else {
@@ -184,7 +240,7 @@ function handleDelete(e) {
 
 function handleDesignate(e) {
   if (e.submitter.value == 'cancel') return
-  
+
   const form = e.target
   const id = crypto.randomUUID()
   const start = +form.start.value
@@ -226,6 +282,33 @@ function handleCreate(e) {
   showDialog('designate', { text, start, end })
 }
 
+function handleSelectValue(e) {
+  const btn = e.target
+  const input = btn.previousElementSibling
+  const { name } = input
+
+  showDialog('labels', { input, name })
+}
+
+function handleAddToPalette(e) {
+  const btn = e.target
+  
+  if (btn.value != 'add') return
+
+  const input = btn.previousElementSibling
+  const form = input.closest('form')
+  const list = form.querySelector('ul')
+  const key = form.key.value
+  const arr = palette[key]
+
+  if (arr.includes(input.value)) return
+
+  arr.push(input.value)
+  savePalette()
+  preparePalette(list, key)
+  form.reset()
+}
+
 function wouldConflict(start, end) {
   return state.designations.some(d => {
     return start == d.start && end == d.end
@@ -265,7 +348,7 @@ function showDialog(type, props) {
 
     if (id) form.id.value = id
     else form.id.removeAttribute('value')
-    
+
     form.text.value = text || ''
     form.kind.value = kind || ''
     form.role.value = role || ''
@@ -297,6 +380,19 @@ function showDialog(type, props) {
     form.end.value = end
     form.text.value = text
     code.innerHTML = subStateToMarkup({ text })
+  } else if (type == 'labels') {
+    const { input, name } = props
+    const form = dialog.querySelector('form')
+    const ul = form.querySelector('ul')
+
+    preparePalette(ul, name + 's')
+    
+    form.key.value = name + 's'
+    form.onsubmit = (e) => {
+      if (e.submitter.value != 'cancel') {
+        input.value = e.submitter.value
+      }
+    }
   }
 
   document.body.appendChild(dialog).showModal()

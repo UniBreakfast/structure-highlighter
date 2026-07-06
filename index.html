@@ -66,6 +66,7 @@
           <label>
             <span>Kind:</span>
             <input name="kind">
+            <button type="button" value="select">≡</button>
           </label>
         </div>
 
@@ -73,6 +74,7 @@
           <label>
             <span>Role:</span>
             <input name="role">
+            <button type="button" value="select">≡</button>
           </label>
         </div>
 
@@ -81,6 +83,7 @@
             <input type="checkbox" name="colored">
             <span>Color:</span>
             <input type="color" name="color" disabled>
+            <button type="button" value="select" disabled>⊞</button>
           </label>
         </div>
 
@@ -102,6 +105,7 @@
           <label>
             <span>Kind:</span>
             <input name="kind">
+            <button type="button" value="select">≡</button>
           </label>
         </div>
 
@@ -109,6 +113,7 @@
           <label>
             <span>Role:</span>
             <input name="role">
+            <button type="button" value="select">≡</button>
           </label>
         </div>
 
@@ -117,6 +122,7 @@
             <input type="checkbox" name="colored">
             <span>Color:</span>
             <input type="color" name="color" disabled>
+            <button type="button" value="select" disabled>⊞</button>
           </label>
         </div>
 
@@ -146,6 +152,25 @@
         <pre><code></code></pre>
       </button>
     </li>
+  </template>
+
+  <template title="labels">
+    <dialog>
+      <form method="dialog">
+        <input type="hidden" name="key">
+        
+        <ul></ul>
+        
+        <div>
+          <input type="text">
+          <button type="button" value="add">Add</button>
+        </div>
+
+        <div>
+          <button value="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
   </template>
 </body>
 
