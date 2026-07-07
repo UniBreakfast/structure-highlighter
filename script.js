@@ -35,6 +35,8 @@ let currentItem = null
 prepareTemplates()
 
 onmousemove = () => currentItem = null
+
+mainView.onsubmit = handleExportImport
 templates.edit.onsubmit = handleUpdate
 templates.select.onsubmit = handleSelect
 templates.designate.onsubmit = handleDesignate
@@ -117,6 +119,15 @@ function loadDesignations() {
 
 function saveDesignations() {
   localStorage.setItem(lsKey1, JSON.stringify(state))
+}
+
+function handleExportImport(e) {
+  const btn = e.submitter
+
+  if (btn.value == 'export-state') return exportState()
+  if (btn.value == 'import-state') return importState()
+  if (btn.value == 'export-palette') return exportPalette()
+  if (btn.value == 'import-palette') return importPalette()
 }
 
 function handleToggleColor(e) {
@@ -564,6 +575,37 @@ function calcOffset(startNode, node, nodeOffset) {
   range.setEnd(node, nodeOffset)
 
   return range.toString().length
+}
+
+function exportState() {
+  const a = document.createElement('a')
+
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }))
+  a.download = 'data.json'
+  a.click()
+}
+
+function importState() {
+  const input = document.createElement('input')
+
+  input.type = 'file'
+  input.accept = 'application/json'
+  input.onchange = () => {
+    const reader = new FileReader()
+    const file = input.files[0]
+
+    if (!file) return
+
+    reader.onload = () => {
+      Object.assign(state, JSON.parse(reader.result))
+      saveDesignations()
+      fill(mainView, state)
+    }
+
+    reader.readAsText(file)
+  }
+
+  input.click()
 }
 
 function loadExampleState() {
