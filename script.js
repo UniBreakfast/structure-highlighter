@@ -453,7 +453,7 @@ function makeDesignationItem(subState) {
   const { kind, role } = designation
 
   btn.value = id
-  btn.title = [kind, role].filter(Boolean).join(', ')
+  btn.name = [kind, role].filter(Boolean).join(', ')
   code.innerHTML = subStateToMarkup(subState)
 
   return item

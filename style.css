@@ -15,6 +15,23 @@ form>pre {
   padding: 15px;
 }
 
+button:has(pre):hover {
+  cursor: pointer;
+  anchor-name: --designation;
+
+  &::after {
+    content: attr(name);
+    position: fixed;
+    position-anchor: --designation;
+    border: 1px solid #000;
+    left: anchor(right);
+    bottom: anchor(top);
+    background: #000;
+    color: #fff;
+    max-width: 200px;
+  }
+}
+
 button>pre {
   margin: 0;
 }
