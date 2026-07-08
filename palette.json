@@ -1,0 +1,22 @@
+{
+  "kinds": [
+    "identifier",
+    "numeric literal",
+    "method reading expression",
+    "property reading expression"
+  ],
+  "roles": [
+    "property source provider",
+    "property name provider",
+    "property accessor",
+    "method provider",
+    "method invoker"
+  ],
+  "colors": [
+    "#8ed6f3",
+    "#d32ed6",
+    "#24ff37",
+    "#fce44b",
+    "#d92626"
+  ]
+}

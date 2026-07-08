@@ -124,10 +124,10 @@ function saveDesignations() {
 function handleExportImport(e) {
   const btn = e.submitter
 
-  if (btn.value == 'export-state') return exportState()
-  if (btn.value == 'import-state') return importState()
-  if (btn.value == 'export-palette') return exportPalette()
-  if (btn.value == 'import-palette') return importPalette()
+  if (btn.value == 'export-state') return exportData(state)
+  if (btn.value == 'import-state') return importData(state)
+  if (btn.value == 'export-palette') return exportData(palette)
+  if (btn.value == 'import-palette') return importData(palette)
 }
 
 function handleToggleColor(e) {
@@ -577,15 +577,15 @@ function calcOffset(startNode, node, nodeOffset) {
   return range.toString().length
 }
 
-function exportState() {
+function exportData(data) {
   const a = document.createElement('a')
 
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }))
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }))
   a.download = 'data.json'
   a.click()
 }
 
-function importState() {
+function importData(data) {
   const input = document.createElement('input')
 
   input.type = 'file'
@@ -597,9 +597,9 @@ function importState() {
     if (!file) return
 
     reader.onload = () => {
-      Object.assign(state, JSON.parse(reader.result))
-      saveDesignations()
-      fill(mainView, state)
+      Object.assign(data, JSON.parse(reader.result))
+      (data == state ? saveDesignations : savePalette)()
+      if (data == state) fill(mainView, state)
     }
 
     reader.readAsText(file)
