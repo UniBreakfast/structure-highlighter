@@ -377,7 +377,7 @@ function wouldConflict(start, end) {
 function getDesignationIds(span) {
   const ids = []
 
-  while (span.matches('span')) {
+  while (span.matches('span:not(dialog .top)')) {
     ids.push(span.dataset.id)
     span = span.parentElement
   }
@@ -562,7 +562,7 @@ function getSelectedFragment(selection) {
     const designation = state.designations.find(d => d.id == id)
 
     start += designation.start
-    end += designation.end
+    end += designation.start
   }
 
   return { text, start, end }
