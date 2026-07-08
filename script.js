@@ -337,10 +337,11 @@ function handleAddToPalette(e) {
   const list = form.querySelector('ul')
   const key = form.key.value
   const arr = palette[key]
+  const value = input.value.trim()
 
-  if (arr.includes(input.value)) return
+  if (!value || arr.includes(value)) return
 
-  arr.push(input.value)
+  arr.push(value)
   savePalette()
   preparePalette(list, key)
   form.reset()
@@ -567,6 +568,8 @@ function escapeHtml(str) {
 }
 
 function getSelectedFragment(selection) {
+  if (selection.isCollapsed) return null
+  
   const range = selection.getRangeAt(0)
   const text = selection.toString()
   let container = range.commonAncestorContainer

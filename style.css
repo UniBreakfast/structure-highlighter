@@ -4,6 +4,8 @@ ul {
   margin: 0;
   display: grid;
   gap: 5px;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 form {
@@ -16,8 +18,19 @@ button {
   cursor: pointer;
 }
 
+dialog {
+  border-radius: 10px;
+}
+
 form>pre {
   padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 0;
+}
+
+button>pre {
+  padding: 2px 7px;
+  border-radius: 3px;
 }
 
 :has(>button:nth-child(2)) {
@@ -39,6 +52,8 @@ button:has(pre):hover {
     background: #000;
     color: #fff;
     max-width: 200px;
+    padding: 3px 8px;
+    border-radius: 10px 10px 10px 0;
   }
 }
 
