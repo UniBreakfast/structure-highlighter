@@ -20,6 +20,12 @@ form>pre {
   padding: 15px;
 }
 
+:has(>button:nth-child(2)) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
 button:has(pre):hover {
   anchor-name: --designation;
 

@@ -71,6 +71,23 @@ function fill(view, subState) {
   }
 }
 
+function fillAllViews() {
+  const subViews =
+    document.querySelectorAll('dialog:has(>form>pre)')
+
+  for (const view of subViews) {
+    const form = view.querySelector('form')
+    const id = form.id.value
+    const subState = getSubState(id)
+
+    if (!subState) continue
+
+    fill(view, subState)
+  }
+
+  fill(mainView, state)
+}
+
 function preparePalette(list, key) {
   const input = list.parentElement.querySelector('div>input')
   const labels = palette[key]
@@ -161,12 +178,14 @@ function handleClick(e) {
 
     const span = e.target
 
-    if (span.matches('.top')) return
+    if (span.matches('dialog .top')) return
 
     const ids = getDesignationIds(span)
     const subStates = ids.map(getSubState)
 
-    return showDialog('select', { subStates })
+    if (ids.length == 1) return showDialog('sub-view', { subState: subStates[0] })
+
+    showDialog('select', { subStates })
   }
 }
 
@@ -241,7 +260,7 @@ function handleUpdate(e) {
   }
 
   saveDesignations()
-  fill(mainView, state)
+  fillAllViews()
 }
 
 function handleDelete(e) {
@@ -251,7 +270,7 @@ function handleDelete(e) {
 
   state.designations.splice(index, 1)
   saveDesignations()
-  fill(mainView, state)
+  fillAllViews()
 }
 
 function handleDesignate(e) {
@@ -270,7 +289,7 @@ function handleDesignate(e) {
 
   state.designations.push(designation)
   saveDesignations()
-  fill(mainView, state)
+  fillAllViews()
 }
 
 function handleSelect(e) {
@@ -286,6 +305,8 @@ function handleSelect(e) {
 }
 
 function handleCreate(e) {
+  e.preventDefault()
+
   const form = e.target.closest('form')
   const fragment = getSelectedFragment(getSelection())
 
@@ -308,7 +329,7 @@ function handleSelectValue(e) {
 
 function handleAddToPalette(e) {
   const btn = e.target
-  
+
   if (btn.value != 'add') return
 
   const input = btn.previousElementSibling
@@ -342,7 +363,7 @@ function handleAdjustPalette(e) {
   if (!(j in arr)) return
 
   [arr[i], arr[j]] = [arr[j], arr[i]]
-  
+
   preparePalette(list, key)
   savePalette()
   dialog.focus()
@@ -387,6 +408,9 @@ function getDesignationIds(span) {
 
 function getSubState(id) {
   const designation = state.designations.find(d => d.id == id)
+
+  if (!designation) return
+
   const { text, start, end } = designation
   const designations = state.designations.filter(
     d => d.start >= start && d.end <= end
@@ -443,7 +467,7 @@ function showDialog(type, props) {
     const ul = form.querySelector('ul')
 
     preparePalette(ul, name + 's')
-    
+
     form.key.value = name + 's'
     form.onsubmit = (e) => {
       if (e.submitter.value != 'cancel') {
@@ -598,7 +622,7 @@ function importData(data) {
 
     reader.onload = () => {
       Object.assign(data, JSON.parse(reader.result))
-      (data == state ? saveDesignations : savePalette)()
+        (data == state ? saveDesignations : savePalette)()
       if (data == state) fill(mainView, state)
     }
 
