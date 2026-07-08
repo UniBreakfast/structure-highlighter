@@ -26,6 +26,7 @@ form>pre {
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 0;
+  min-height: 90px;
 }
 
 button>pre {
@@ -37,6 +38,15 @@ button>pre {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+  justify-content: flex-end;
+
+  hr {
+    border: none;
+  }
+}
+
+:last-child:has(>button) {
+  text-align: right;
 }
 
 button:has(pre):hover {
@@ -67,7 +77,8 @@ pre {
 }
 
 :not(button)>pre span:hover:not(:has(:hover)):not(dialog .top) {
-  outline: 1px solid orange;
+  outline: 3px double currentColor;
+  outline-offset: 3px;
   border-radius: 3px;
   cursor: pointer;
 }

@@ -23,10 +23,11 @@
       <div>
         <button value="edit">Edit</button>
         <button value="designate">Designate selected</button>
-        <button value="export-state">Export state</button>
-        <button value="export-palette">Export palette</button>
-        <button value="import-state">Import state</button>
-        <button value="import-palette">Import palette</button>
+        <hr>
+        <button value="export-state" title="Export content with designations to JSON file">⇩ content</button>
+        <button value="export-palette" title="Export palette to JSON file">⇩ palette</button>
+        <button value="import-state" title="Import content with designations from JSON file">⇧ content</button>
+        <button value="import-palette" title="Import palette from JSON file">⇧ palette</button>
       </div>
       
       <pre><code></code></pre>
@@ -87,7 +88,7 @@
             <input type="checkbox" name="colored">
             <span>Color:</span>
             <input type="color" name="color" value="#ffffff" disabled>
-            <button type="button" value="select" disabled>⊞</button>
+            <button type="button" value="select" disabled>▤</button>
           </label>
         </div>
 
@@ -103,7 +104,7 @@
     <dialog class="edit">
       <form method="dialog">
         <input type="hidden" name="id">
-        <textarea name="text"></textarea>
+        <textarea name="text" rows="8" cols="50"></textarea>
         
         <div>
           <label>
@@ -126,7 +127,7 @@
             <input type="checkbox" name="colored">
             <span>Color:</span>
             <input type="color" name="color" value="#ffffff" disabled>
-            <button type="button" value="select" disabled>⊞</button>
+            <button type="button" value="select" disabled>▤</button>
           </label>
         </div>
 
