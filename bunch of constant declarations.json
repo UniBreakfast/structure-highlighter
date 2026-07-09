@@ -1,0 +1,464 @@
+{
+  "text": "const lsKey1 = 'sh-state'\nconst lsKey2 = 'sh-palette'\nconst state = { text: '', designations: [] }\nconst palette = { kinds: [], roles: [], colors: [] }\nconst templates = {}\nconst mainView = document.querySelector('main')",
+  "designations": [
+    {
+      "id": "f7beee5e-a0dd-40f4-8e30-b0eb209afbcc",
+      "start": 0,
+      "end": 25,
+      "text": "const lsKey1 = 'sh-state'",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "e33efa58-a830-4e89-9e9f-239f0cec8912",
+      "start": 26,
+      "end": 53,
+      "text": "const lsKey2 = 'sh-palette'",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "19c8ef97-a6a4-4930-b50c-a477cab4a5fb",
+      "start": 54,
+      "end": 98,
+      "text": "const state = { text: '', designations: [] }",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "1918b36f-5b68-4311-8903-94339a639bb9",
+      "start": 99,
+      "end": 151,
+      "text": "const palette = { kinds: [], roles: [], colors: [] }",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "ce526ab9-ddfd-44b2-a0ac-357888c041eb",
+      "start": 152,
+      "end": 172,
+      "text": "const templates = {}",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "46b8c239-6c17-4eac-9c8f-2dc255895b8e",
+      "start": 173,
+      "end": 220,
+      "text": "const mainView = document.querySelector('main')",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "d8df4062-54c4-409d-ad7d-63706cea9a7b",
+      "start": 0,
+      "end": 5,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "a19121b5-0cd1-4e01-ae49-f9a4ac48f676",
+      "start": 26,
+      "end": 31,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "42bbb71c-bc38-4fbe-8bcb-d926994b7582",
+      "start": 54,
+      "end": 59,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "604baf40-dd3c-483a-a864-b743ff8de5b5",
+      "start": 99,
+      "end": 104,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "19dfcd4d-cd35-407e-b3d6-5cfc31391ece",
+      "start": 152,
+      "end": 157,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "76bf0596-e6b0-4512-a1d8-6d7b578c576c",
+      "start": 173,
+      "end": 178,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "6dd4abfa-47f5-48e8-a2c1-9cde82fbe34f",
+      "start": 6,
+      "end": 12,
+      "text": "lsKey1",
+      "kind": "identifier",
+      "role": "constant name",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "63a30e49-44f9-4db6-a17e-ae95295b2dda",
+      "start": 32,
+      "end": 38,
+      "text": "lsKey2",
+      "kind": "identifier",
+      "role": "constant name",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "247a6193-fd98-4cbe-badc-a7e412c1fb3a",
+      "start": 60,
+      "end": 65,
+      "text": "state",
+      "kind": "identifier",
+      "role": "constant name",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "99cf0094-c89d-4c58-baae-932c35b25a7c",
+      "start": 105,
+      "end": 112,
+      "text": "palette",
+      "kind": "identifier",
+      "role": "constant name",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "a7549f04-68f2-4619-ab56-f0cbe1fa4f10",
+      "start": 158,
+      "end": 167,
+      "text": "templates",
+      "kind": "identifier",
+      "role": "constant name",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "3256ffff-9529-45d0-8fdd-e6eef9238a01",
+      "start": 179,
+      "end": 187,
+      "text": "mainView",
+      "kind": "identifier",
+      "role": "constant name",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "ee09d6f6-e6d6-4002-a87a-91809f5d8310",
+      "start": 15,
+      "end": 25,
+      "text": "'sh-state'",
+      "kind": "string literal",
+      "role": "constant value provider",
+      "color": "#ff9466"
+    },
+    {
+      "id": "3d006755-ea19-499a-aaed-47b4b52ff98d",
+      "start": 41,
+      "end": 53,
+      "text": "'sh-palette'",
+      "kind": "string literal",
+      "role": "constant value provider",
+      "color": "#ff9466"
+    },
+    {
+      "id": "f52160a7-8513-40a0-b46d-0cd73fbf6e53",
+      "start": 76,
+      "end": 78,
+      "text": "''",
+      "kind": "string literal",
+      "role": "property value provider",
+      "color": "#ff9466"
+    },
+    {
+      "id": "bad02007-d3dc-41a6-bfbc-4b8ecbed0169",
+      "start": 213,
+      "end": 219,
+      "text": "'main'",
+      "kind": "string literal",
+      "role": "argument provider",
+      "color": "#ff9466"
+    },
+    {
+      "id": "8dd768fc-5d60-4efe-a645-58d6d70ea03a",
+      "start": 68,
+      "end": 98,
+      "text": "{ text: '', designations: [] }",
+      "kind": "expression",
+      "role": "object literal, constant value provider",
+      "color": ""
+    },
+    {
+      "id": "aa408879-1eb2-4283-8fbc-8e650f3c1ead",
+      "start": 115,
+      "end": 151,
+      "text": "{ kinds: [], roles: [], colors: [] }",
+      "kind": "expression",
+      "role": "object literal, constant value provider",
+      "color": ""
+    },
+    {
+      "id": "e9069b0f-8d29-4581-b3c5-034b85f15d1b",
+      "start": 170,
+      "end": 172,
+      "text": "{}",
+      "kind": "expression",
+      "role": "object literal, constant value provider",
+      "color": ""
+    },
+    {
+      "id": "9811f3cb-7a84-4854-82e4-c9ccea09dd0f",
+      "start": 124,
+      "end": 126,
+      "text": "[]",
+      "kind": "expression",
+      "role": "array literal, property value provider",
+      "color": ""
+    },
+    {
+      "id": "a7ef6ce8-8719-4cbf-aa34-73932f371f4d",
+      "start": 94,
+      "end": 96,
+      "text": "[]",
+      "kind": "expression",
+      "role": "array literal, property value provider",
+      "color": ""
+    },
+    {
+      "id": "aacd836e-2eee-4817-a577-49f78920e16e",
+      "start": 135,
+      "end": 137,
+      "text": "[]",
+      "kind": "expression",
+      "role": "array literal, property value provider",
+      "color": ""
+    },
+    {
+      "id": "e7dfa157-f885-4a4b-ac00-d9648de0c404",
+      "start": 147,
+      "end": 149,
+      "text": "[]",
+      "kind": "expression",
+      "role": "array literal, property value provider",
+      "color": ""
+    },
+    {
+      "id": "59627f04-1bc0-4b83-9d82-0055b83f2c9c",
+      "start": 70,
+      "end": 74,
+      "text": "text",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "03e1578d-b88c-4640-98ae-89e63c353ae0",
+      "start": 80,
+      "end": 92,
+      "text": "designations",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "7c4917b5-166b-4acc-9a15-dbfcd99c1447",
+      "start": 117,
+      "end": 122,
+      "text": "kinds",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "35688023-2c11-44cc-a6f9-983a5df4f0c3",
+      "start": 128,
+      "end": 133,
+      "text": "roles",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "f53d89f7-afb1-4422-9a87-c8f423db94f5",
+      "start": 139,
+      "end": 145,
+      "text": "colors",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "2c1835ec-0563-46cc-8179-e64512b15f33",
+      "start": 199,
+      "end": 212,
+      "text": "querySelector",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "889112a2-31bb-42d7-89ca-bb4991473323",
+      "start": 190,
+      "end": 198,
+      "text": "document",
+      "kind": "identifier",
+      "role": "property source provider",
+      "color": "#24ff37"
+    },
+    {
+      "id": "cacd66e9-6f6f-4932-b652-8a2f6cde29ee",
+      "start": 13,
+      "end": 14,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "77d276a0-d03c-4e60-b282-f0134907548a",
+      "start": 39,
+      "end": 40,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "e3392dcb-ab68-4845-8404-eff2eaa680f2",
+      "start": 66,
+      "end": 67,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "4e4b7f9d-6679-43ec-9ce7-0329446a6103",
+      "start": 113,
+      "end": 114,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "2feb5566-b3e8-45f0-8f35-8dce0a899c28",
+      "start": 168,
+      "end": 169,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "5659deba-ee42-4868-9318-dc0891af2ded",
+      "start": 188,
+      "end": 189,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "d5f419dd-2036-4f86-a227-a2e82f57df80",
+      "start": 78,
+      "end": 79,
+      "text": ",",
+      "kind": "punctuator",
+      "role": "property separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "fc373734-686b-46fc-a0f0-1d03ef0efc38",
+      "start": 126,
+      "end": 127,
+      "text": ",",
+      "kind": "punctuator",
+      "role": "property separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "cef04631-f4a6-4adc-ac29-72f5fc5bef8b",
+      "start": 137,
+      "end": 138,
+      "text": ",",
+      "kind": "punctuator",
+      "role": "property separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "674a61fe-862b-4419-98e8-e4a9b9cede57",
+      "start": 198,
+      "end": 199,
+      "text": ".",
+      "kind": "dot accessor",
+      "role": "method reading operator",
+      "color": ""
+    },
+    {
+      "id": "773afbd8-66d0-4aa1-825a-fabe34aa48b0",
+      "start": 74,
+      "end": 75,
+      "text": ":",
+      "kind": "punctuator",
+      "role": "key-value separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "aececb06-4bd1-4133-a710-7a58b7d7ad40",
+      "start": 92,
+      "end": 93,
+      "text": ":",
+      "kind": "punctuator",
+      "role": "key-value separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "68687bc8-f876-44b7-8c11-94fa3b331d84",
+      "start": 122,
+      "end": 123,
+      "text": ":",
+      "kind": "punctuator",
+      "role": "key-value separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "8d018a0a-c2bb-486f-85cd-69f7a4ed21b8",
+      "start": 133,
+      "end": 134,
+      "text": ":",
+      "kind": "punctuator",
+      "role": "key-value separation punctuation in object literal",
+      "color": ""
+    },
+    {
+      "id": "5c5c10ad-b260-4252-b87c-7c5cfd7aaedd",
+      "start": 145,
+      "end": 146,
+      "text": ":",
+      "kind": "punctuator",
+      "role": "key-value separation punctuation in object literal",
+      "color": ""
+    }
+  ]
+}

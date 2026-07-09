@@ -418,8 +418,9 @@ function showDialog(type, props) {
     form.kind.value = kind || ''
     form.role.value = role || ''
     form.colored.checked = !!color
-    form.color.disabled = !color
     form.color.value = color || ''
+    form.color.disabled = !color
+    form.color.nextElementSibling.disabled = !color
 
   } else if (type == 'select') {
     const { subStates } = props

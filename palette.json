@@ -1,19 +1,16 @@
 {
   "kinds": [
+    "expression",
+    "statement",
     "identifier",
+    "keyword",
     "numeric literal",
+    "string literal",
     "method reading expression",
     "property reading expression",
     "dot operator",
-    "a",
-    "v",
-    "b",
-    "c",
-    "d",
-    "e",
-    "g",
-    "f",
-    "ee"
+    "operator",
+    "punctuator"
   ],
   "roles": [
     "property source provider",
@@ -21,12 +18,20 @@
     "property accessor",
     "method provider",
     "method invoker",
-    "global variable"
+    "global variable",
+    "constant declaration",
+    "object literal",
+    "array literal",
+    "assignment operator",
+    "property separation punctuation in object literal",
+    "key-value separation punctuation in object literal"
   ],
   "colors": [
+    "#adc6ff",
     "#c7fbff",
     "#fce44b",
+    "#ff9466",
     "#24ff37",
-    "#d32ed6"
+    "#ff80e8"
   ]
 }

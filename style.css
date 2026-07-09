@@ -105,6 +105,12 @@ pre {
   color: white
 }
 
+:has(>[type=color]) {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
 :not(button)>pre span:hover:not(:has(:hover)):not(dialog .top) {
   outline: 3px double currentColor;
   outline-offset: 3px;
