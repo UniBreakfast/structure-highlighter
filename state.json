@@ -2,15 +2,6 @@
   "text": "console.log(4)",
   "designations": [
     {
-      "id": 1,
-      "start": 0,
-      "end": 7,
-      "text": "console",
-      "kind": "identifier",
-      "role": "property source provider",
-      "color": "#8ed6f3"
-    },
-    {
       "id": 3,
       "start": 0,
       "end": 14,
@@ -45,6 +36,33 @@
       "kind": "function call operator",
       "role": "method invoker",
       "color": ""
+    },
+    {
+      "id": "0284821d-44f3-4051-98b8-93bb648a21b4",
+      "start": 0,
+      "end": 11,
+      "text": "console.log",
+      "kind": "method reading expression",
+      "role": "method provider",
+      "color": ""
+    },
+    {
+      "id": "6978459a-5c98-476d-88e8-d4d7a1324a5d",
+      "start": 8,
+      "end": 11,
+      "text": "log",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#fce44b"
+    },
+    {
+      "id": "1f3115af-109c-4008-a390-f4d257fa0a3f",
+      "start": 0,
+      "end": 7,
+      "text": "console",
+      "kind": "identifier",
+      "role": "property source provider",
+      "color": "#c7fbff"
     }
   ]
 }

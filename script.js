@@ -1,32 +1,7 @@
 const lsKey1 = 'sh-state'
 const lsKey2 = 'sh-palette'
-const state = {
-  text: '',
-  designations: []
-}
-const palette = {
-  kinds: [
-    'identifier',
-    'property reading expression',
-    'method reading expression',
-  ],
-  roles: [
-    'property source provider',
-    'property name provider',
-    'property accessor',
-    'method provider',
-    'method invoker',
-  ],
-  colors: [
-    '#8ed6f3',
-    '#fce44b',
-    '#24ff37',
-    '#8ed6f3',
-    '#8ed6f3',
-    '#8ed6f3',
-  ]
-}
-
+const state = { text: '', designations: [] }
+const palette = { kinds: [], roles: [], colors: [] }
 const templates = {}
 const mainView = document.querySelector('main')
 
@@ -34,9 +9,11 @@ let currentItem = null
 
 prepareTemplates()
 
-onmousemove = () => currentItem = null
+body.onmousemove = () => currentItem = null
+body.onchange = handleToggleColor
+body.onclick = handleClick
 
-mainView.onsubmit = handleExportImport
+mainView.onsubmit = handleMainView
 templates.edit.onsubmit = handleUpdate
 templates.select.onsubmit = handleSelect
 templates.designate.onsubmit = handleDesignate
@@ -44,14 +21,29 @@ templates.labels.onclick = handleAddToPalette
 templates.labels.onkeydown = handleAdjustPalette
 templates.labels.oncontextmenu = handleRemoveFromPalette
 
-body.onchange = handleToggleColor
-body.onclick = handleClick
-
 loadPalette()
 loadDesignations()
-// loadExampleState() // TODO: remove
-// loadEmptyState() // TODO: remove
 fill(mainView, state)
+
+function loadPalette() {
+  const json = localStorage.getItem(lsKey2)
+
+  if (json) Object.assign(palette, JSON.parse(json))
+}
+
+function savePalette() {
+  localStorage.setItem(lsKey2, JSON.stringify(palette))
+}
+
+function loadDesignations() {
+  const json = localStorage.getItem(lsKey1)
+
+  if (json) Object.assign(state, JSON.parse(json))
+}
+
+function saveDesignations() {
+  localStorage.setItem(lsKey1, JSON.stringify(state))
+}
 
 function fill(view, subState) {
   const { id, text } = subState
@@ -88,6 +80,17 @@ function fillAllViews() {
   fill(mainView, state)
 }
 
+function prepareTemplates() {
+  const templateElements = document.querySelectorAll('template')
+
+  for (const template of templateElements) {
+    const { title } = template
+
+    templates[title] = template.content.firstElementChild
+    template.remove()
+  }
+}
+
 function preparePalette(list, key) {
   const input = list.parentElement.querySelector('div>input')
   const labels = palette[key]
@@ -107,44 +110,14 @@ function preparePalette(list, key) {
   input.value = key == 'colors' ? '#ffffff' : ''
 }
 
-function prepareTemplates() {
-  const templateElements = document.querySelectorAll('template')
-
-  for (const template of templateElements) {
-    const { title } = template
-
-    templates[title] = template.content.firstElementChild
-    template.remove()
-  }
-}
-
-function loadPalette() {
-  const json = localStorage.getItem(lsKey2)
-
-  if (json) Object.assign(palette, JSON.parse(json))
-}
-
-function savePalette() {
-  localStorage.setItem(lsKey2, JSON.stringify(palette))
-}
-
-function loadDesignations() {
-  const json = localStorage.getItem(lsKey1)
-
-  if (json) Object.assign(state, JSON.parse(json))
-}
-
-function saveDesignations() {
-  localStorage.setItem(lsKey1, JSON.stringify(state))
-}
-
-function handleExportImport(e) {
+function handleMainView(e) {
   const btn = e.submitter
 
   if (btn.value == 'export-state') return exportData(state)
   if (btn.value == 'import-state') return importData(state)
   if (btn.value == 'export-palette') return exportData(palette)
   if (btn.value == 'import-palette') return importData(palette)
+  if (btn.value == 'list') return listAllDesignations()
 }
 
 function handleToggleColor(e) {
@@ -190,6 +163,8 @@ function handleClick(e) {
 }
 
 function handleEdit(e) {
+  e.preventDefault()
+
   const form = e.target.closest('form')
   const id = form.id?.value
   const text = form.text?.value
@@ -219,7 +194,7 @@ function handleUpdate(e) {
 
     if (text == designation.text) {
       saveDesignations()
-      fill(mainView, state)
+      fillAllViews()
 
       return
     }
@@ -386,6 +361,14 @@ function handleRemoveFromPalette(e) {
   savePalette()
   currentItem = null
   e.preventDefault()
+}
+
+function listAllDesignations() {
+  const designations = state.designations.toSorted((a, b) => (a.start - b.start) || (b.end - a.end))
+  const ids = designations.map(d => d.id)
+  const subStates = ids.map(getSubState)
+
+  showDialog('select', { subStates })
 }
 
 function wouldConflict(start, end) {
@@ -569,7 +552,7 @@ function escapeHtml(str) {
 
 function getSelectedFragment(selection) {
   if (selection.isCollapsed) return null
-  
+
   const range = selection.getRangeAt(0)
   const text = selection.toString()
   let container = range.commonAncestorContainer
@@ -624,7 +607,7 @@ function importData(data) {
     if (!file) return
 
     reader.onload = () => {
-      Object.assign(data, JSON.parse(reader.result))
+      Object.assign(data, JSON.parse(reader.result)),
         (data == state ? saveDesignations : savePalette)()
       if (data == state) fill(mainView, state)
     }
@@ -633,25 +616,4 @@ function importData(data) {
   }
 
   input.click()
-}
-
-function loadExampleState() {
-  state.text = 'console.log(4)'
-  state.designations = [
-    { id: 1, start: 0, end: 7, text: 'console', kind: 'identifier', role: 'property source provider', color: '#8ed6f3' },
-    { id: 2, start: 0, end: 11, text: 'console.log', kind: 'property reading expression', role: 'method provider', color: '' },
-    { id: 3, start: 0, end: 14, text: 'console.log(4)', kind: 'method call expression', role: '', color: '' },
-    { id: 4, start: 7, end: 8, text: '.', kind: 'dot operator', role: 'property accessor', color: '' },
-    { id: 5, start: 8, end: 11, text: 'log', kind: 'identifier', role: 'property name provider', color: '#fce44b' },
-    { id: 6, start: 11, end: 12, text: '(', kind: 'function call operator', role: 'method invoker', color: '' },
-    { id: 7, start: 12, end: 13, text: '4', kind: 'numeric literal', role: 'argument provider', color: '#24ff37' },
-    { id: 8, start: 13, end: 14, text: ')', kind: 'function call operator', role: 'method invoker', color: '' },
-  ]
-}
-
-function loadEmptyState() {
-  state.text = 'console.log(4)'
-  state.designations = [
-
-  ]
 }

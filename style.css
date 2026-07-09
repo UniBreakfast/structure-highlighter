@@ -1,3 +1,7 @@
+body, button, input {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -13,6 +17,10 @@ form {
   gap: 5px;
 }
 
+main>form>div>button {
+  min-height: 28px;
+}
+
 button {
   user-select: none;
   cursor: pointer;
@@ -20,6 +28,7 @@ button {
 
 dialog {
   border-radius: 10px;
+  max-width: 82vw;
 }
 
 form>pre {
@@ -38,19 +47,39 @@ button>pre {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  justify-content: flex-end;
+  
+  &:not(dialog :first-of-type) {
+    justify-content: flex-end;
+  }
 
   hr {
     border: none;
   }
 }
 
-:last-child:has(>button) {
+form>:last-child:has(>button) {
+  margin-top: 10px;
   text-align: right;
 }
 
 button:has(pre):hover {
   anchor-name: --designation;
+
+  &::before {
+    content: '';
+    position: fixed;
+    position-anchor: --designation;
+    border: 1px solid #000;
+    left: anchor(right);
+    top: anchor(top);
+    width: 20px;
+    height: 12px;
+    border-bottom-right-radius: 100%;
+    corner-shape: bevel;
+    transform-origin: right top;
+    transform: skewX(-30deg);
+    background: #000;
+  }
 
   &::after {
     content: attr(name);

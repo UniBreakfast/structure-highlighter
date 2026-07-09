@@ -3,20 +3,30 @@
     "identifier",
     "numeric literal",
     "method reading expression",
-    "property reading expression"
+    "property reading expression",
+    "dot operator",
+    "a",
+    "v",
+    "b",
+    "c",
+    "d",
+    "e",
+    "g",
+    "f",
+    "ee"
   ],
   "roles": [
     "property source provider",
     "property name provider",
     "property accessor",
     "method provider",
-    "method invoker"
+    "method invoker",
+    "global variable"
   ],
   "colors": [
-    "#8ed6f3",
-    "#d32ed6",
-    "#24ff37",
+    "#c7fbff",
     "#fce44b",
-    "#d92626"
+    "#24ff37",
+    "#d32ed6"
   ]
 }
