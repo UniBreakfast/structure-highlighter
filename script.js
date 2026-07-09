@@ -181,14 +181,14 @@ function handleUpdate(e) {
 
   const form = e.target
   const id = form.id.value
-  const text = form.text.value
+  const text = form.text.value.trim()
   const { designations } = state
 
   if (id) {
     const designation = designations.find(d => d.id == id)
 
-    designation.kind = form.kind.value
-    designation.role = form.role.value
+    designation.kind = form.kind.value.trim()
+    designation.role = form.role.value.trim()
     designation.color =
       form.colored.checked ? form.color.value : ''
 
@@ -256,8 +256,8 @@ function handleDesignate(e) {
   const start = +form.start.value
   const end = +form.end.value
   const text = form.text.value
-  const kind = form.kind.value
-  const role = form.role.value
+  const kind = form.kind.value.trim()
+  const role = form.role.value.trim()
   const colored = form.colored.checked
   const color = colored ? form.color.value : ''
   const designation = { id, start, end, text, kind, role, color }
