@@ -43,12 +43,12 @@ button>pre {
   border-radius: 3px;
 }
 
-:has(>button:nth-child(2)) {
+:has(>button+button) {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
   
-  &:not(dialog :first-of-type) {
+  &:not(dialog :first-of-type), &:last-child {
     justify-content: flex-end;
   }
 
@@ -150,5 +150,13 @@ pre {
 
   :not(:last-child)>& {
     border-bottom: none;
+  }
+}
+
+.alert, .confirm {
+  max-width: calc(min(280px, 80vw));
+
+  output {
+    white-space: pre-wrap;
   }
 }

@@ -182,6 +182,31 @@
       </button>
     </li>
   </template>
+
+  <template title="alert">
+    <dialog>
+      <form method="dialog">
+        <output name="message"></output>
+
+        <div>
+          <button>OK</button>
+        </div>
+      </form>
+    </dialog>
+  </template>
+
+  <template title="confirm">
+    <dialog>
+      <form method="dialog">
+        <output name="message"></output>
+
+        <div>
+          <button value="ok">OK</button>
+          <button value="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+  </template>
 </body>
 
 </html>

@@ -26,7 +26,10 @@ loadPalette()
 loadDesignations()
 fill(mainView, state)
 
-if (!state.text) alert('Edit → add content text to start')
+if (!state.text) showDialog(
+  'alert',
+  { message: 'Edit → add content text → Update to start' }
+)
 
 function loadPalette() {
   const json = localStorage.getItem(lsKey2)
@@ -75,7 +78,10 @@ function fillAllViews() {
     const id = form.id.value
     const subState = getSubState(id)
 
-    if (!subState) continue
+    if (!subState) {
+      form.parentElement.close()
+      continue
+    }
 
     fill(view, subState)
   }
@@ -182,7 +188,9 @@ function handleEdit(e) {
   showDialog('edit', { id, text, kind, role, color })
 }
 
-function handleUpdate(e) {
+async function handleUpdate(e) {
+  e.preventDefault()
+
   const btn = e.submitter
 
   if (btn.value != 'update') return
@@ -201,7 +209,10 @@ function handleUpdate(e) {
     if (!kind && !role && !colored) {
       e.preventDefault()
 
-      return alert('Designation must have at least some characteristic (kind, role or color).')
+      return showDialog(
+        'alert',
+        { message: 'Designation must have at least some characteristic (kind, role or color).' }
+      )
     }
 
     designation.kind = kind
@@ -212,17 +223,21 @@ function handleUpdate(e) {
       saveDesignations()
       fillAllViews()
 
-      return
+      return form.parentElement.close()
     }
 
     const subState = getSubState(id)
 
-    if (!text && !confirm('Empty designation will be discarded. Do you confirm?')) return e.preventDefault()
-    
+    if (!text && !await showDialog(
+      'confirm',
+      { message: 'Empty designation will be discarded. Do you confirm?' }
+    )) return
+
     if (warnUpdateToDiscard && subState.designations.length > 1) {
-      if (
-        !confirm('All designations inside current edited designation will be discarded. Accept that and proceed anyway?')
-      ) return e.preventDefault()
+      if (!await showDialog(
+        'confirm',
+        { message: 'All designations inside current edited designation will be discarded. Accept that and proceed anyway?' }
+      )) return
 
       warnUpdateToDiscard = false
     }
@@ -259,9 +274,10 @@ function handleUpdate(e) {
     }
   } else {
     if (warnUpdateToDiscard && state.designations.length) {
-      if (
-        !confirm('All designations will be discarded. Accept that and update anyway?')
-      ) return e.preventDefault()
+      if (!await showDialog(
+        'confirm',
+        { message: 'All designations will be discarded. Accept that and update anyway?' }
+      )) return
 
       warnUpdateToDiscard = false
     }
@@ -272,11 +288,17 @@ function handleUpdate(e) {
 
   saveDesignations()
   fillAllViews()
+  form.parentElement.close()
 }
 
-function handleDelete(e) {
-  if (!confirm('Are you sure you want to discard this designation? The text will remain.')) return e.preventDefault()
-  
+async function handleDelete(e) {
+  e.preventDefault()
+
+  if (!await showDialog(
+    'confirm',
+    { message: 'Are you sure you want to discard this designation? The text will remain.' }
+  )) return
+
   const form = e.target.closest('form')
   const id = form.id.value
   const index = state.designations.findIndex(d => d.id == id)
@@ -284,6 +306,7 @@ function handleDelete(e) {
   state.designations.splice(index, 1)
   saveDesignations()
   fillAllViews()
+  form.parentElement.close()
 }
 
 function handleCreate(e) {
@@ -292,11 +315,17 @@ function handleCreate(e) {
   const form = e.target.closest('form')
   const fragment = getSelectedFragment(getSelection())
 
-  if (!fragment) return alert('Nothing selected to designate or selection is outside of the content.')
+  if (!fragment) return showDialog(
+    'alert',
+    { message: 'Nothing selected to designate or selection is outside of the content.' }
+  )
 
   const { text, start, end } = fragment
 
-  if (wouldConflict(start, end)) return alert('Intersecting designations are not allowed.')
+  if (wouldConflict(start, end)) return showDialog(
+    'alert',
+    { message: 'Intersecting designations are not allowed.' }
+  )
 
   showDialog('designate', { text, start, end })
 }
@@ -314,8 +343,11 @@ function handleDesignate(e) {
   const colored = form.colored.checked
   const color = colored ? form.color.value : ''
 
-  if (!kind && !role && !colored) return alert('Designation must have at least some characteristic (kind, role or color).')
-  
+  if (!kind && !role && !colored) return showDialog(
+    'alert',
+    { message: 'Designation must have at least some characteristic (kind, role or color).' }
+  )
+
   const designation = { id, start, end, text, kind, role, color }
 
   state.designations.push(designation)
@@ -348,13 +380,16 @@ function handleAddToPalette(e) {
   const form = btn.closest('form')
   const key = form.key.value
 
-  if (btn.value == 'hints') return alert(
-`► Add ${key} to palette to easily use more than once.
+  if (btn.value == 'hints') return showDialog(
+    'alert',
+    {
+      message: `► Add ${key} to palette to easily use more than once.
 ► Select one to use it.
 ► Hover over it and press Up/Down to reorder.
 ► Right click to discard one.
 `
-)
+    }
+  )
 
   if (btn.value != 'add') return
 
@@ -363,9 +398,15 @@ function handleAddToPalette(e) {
   const arr = palette[key]
   const value = input.value.trim()
 
-  if (!value) return alert(`Cannot add empty ${key}.`)
+  if (!value) return showDialog(
+    'alert',
+    { message: `Cannot add empty ${key}.` }
+  )
 
-  if (arr.includes(value)) return alert(`Cannot add duplicate ${key} and this one already exists.`)
+  if (arr.includes(value)) return showDialog(
+    'alert',
+    { message: `Cannot add duplicate ${key} and this one already exists.` }
+  )
 
   arr.push(value)
   savePalette()
@@ -418,8 +459,11 @@ function handleRemoveFromPalette(e) {
 function listAllDesignations() {
   const designations = state.designations.toSorted((a, b) => (a.start - b.start) || (b.end - a.end))
 
-  if (!designations.length) return alert('No designations found. Make some by selecting and designating some textual fragments.')
-  
+  if (!designations.length) return showDialog(
+    'alert',
+    { message: 'No designations found. Make some by selecting and designating some textual fragments.' }
+  )
+
   const ids = designations.map(d => d.id)
   const subStates = ids.map(getSubState)
 
@@ -514,9 +558,25 @@ function showDialog(type, props) {
         input.value = e.submitter.value
       }
     }
+  } else if (type == 'alert') {
+    const { message } = props
+    const form = dialog.querySelector('form')
+
+    form.message.value = message
+  } else if (type == 'confirm') {
+    const { message } = props
+    const form = dialog.querySelector('form')
+
+    form.message.value = message
   }
 
   document.body.appendChild(dialog).showModal()
+
+  if (type == 'confirm') return new Promise(
+    resolve => dialog.onclose = () => resolve(
+      dialog.returnValue == 'ok'
+    )
+  )
 }
 
 function makeDesignationItem(subState) {
