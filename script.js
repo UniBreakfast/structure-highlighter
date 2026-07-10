@@ -248,6 +248,14 @@ function handleUpdate(e) {
       if (!d.text) designations.splice(i, 1)
     }
   } else {
+    if (warnUpdateToDiscard && state.designations.length) {
+      if (
+        !confirm('All designations will be discarded. Accept that and update anyway?')
+      ) return e.preventDefault()
+
+      warnUpdateToDiscard = false
+    }
+    
     state.text = text
     state.designations = []
   }
@@ -264,6 +272,21 @@ function handleDelete(e) {
   state.designations.splice(index, 1)
   saveDesignations()
   fillAllViews()
+}
+
+function handleCreate(e) {
+  e.preventDefault()
+
+  const form = e.target.closest('form')
+  const fragment = getSelectedFragment(getSelection())
+
+  if (!fragment) return alert('Nothing selected to designate.')
+
+  const { text, start, end } = fragment
+
+  if (wouldConflict(start, end)) return alert('Intersecting designations are not allowed.')
+
+  showDialog('designate', { text, start, end })
 }
 
 function handleDesignate(e) {
@@ -295,21 +318,6 @@ function handleSelect(e) {
   const subState = getSubState(id)
 
   showDialog('sub-view', { subState })
-}
-
-function handleCreate(e) {
-  e.preventDefault()
-
-  const form = e.target.closest('form')
-  const fragment = getSelectedFragment(getSelection())
-
-  if (!fragment) return
-
-  const { text, start, end } = fragment
-
-  if (wouldConflict(start, end)) return
-
-  showDialog('designate', { text, start, end })
 }
 
 function handleSelectValue(e) {
