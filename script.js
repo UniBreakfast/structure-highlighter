@@ -290,7 +290,7 @@ function handleCreate(e) {
   const form = e.target.closest('form')
   const fragment = getSelectedFragment(getSelection())
 
-  if (!fragment) return alert('Nothing selected to designate.')
+  if (!fragment) return alert('Nothing selected to designate or selection is outside of the content.')
 
   const { text, start, end } = fragment
 
