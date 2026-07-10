@@ -255,7 +255,7 @@ function handleUpdate(e) {
 
       warnUpdateToDiscard = false
     }
-    
+
     state.text = text
     state.designations = []
   }
@@ -497,9 +497,10 @@ function makeDesignationItem(subState) {
   const { id } = subState
   const designation = state.designations.find(d => d.id == id)
   const { kind, role } = designation
+  const kindrole = [kind, role].filter(Boolean).join(', ')
 
   btn.value = id
-  btn.name = [kind, role].filter(Boolean).join(', ')
+  if (kindrole) btn.name = kindrole
   code.innerHTML = subStateToMarkup(subState)
 
   return item
