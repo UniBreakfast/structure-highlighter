@@ -459,6 +459,33 @@
       "kind": "punctuator",
       "role": "key-value separation punctuation in object literal",
       "color": ""
+    },
+    {
+      "id": "d9e75eb4-8e0d-49a5-860c-357e336e2c15",
+      "start": 212,
+      "end": 213,
+      "text": "(",
+      "kind": "punctuator",
+      "role": "function call operator",
+      "color": ""
+    },
+    {
+      "id": "f277cd0f-c6ef-426e-b6e2-d0fcf46d3f00",
+      "start": 219,
+      "end": 220,
+      "text": ")",
+      "kind": "punctuator",
+      "role": "function call operator",
+      "color": ""
+    },
+    {
+      "id": "190824be-71a3-4ab3-a1bc-b6fa3bf22258",
+      "start": 190,
+      "end": 212,
+      "text": "document.querySelector",
+      "kind": "expression",
+      "role": "method provider",
+      "color": ""
     }
   ]
 }

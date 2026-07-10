@@ -103,7 +103,9 @@ button>pre {
 
 pre {
   background: #555;
-  color: white
+  color: white;
+  white-space: pre-wrap;
+  overflow: auto;
 }
 
 :has(>[type=color]) {

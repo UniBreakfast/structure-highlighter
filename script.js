@@ -6,6 +6,7 @@ const templates = {}
 const mainView = document.querySelector('main')
 
 let currentItem = null
+let warnUpdateToDiscard = true
 
 prepareTemplates()
 
@@ -24,6 +25,8 @@ templates.palette.oncontextmenu = handleRemoveFromPalette
 loadPalette()
 loadDesignations()
 fill(mainView, state)
+
+if (!state.text) alert('Edit → add content text to start')
 
 function loadPalette() {
   const json = localStorage.getItem(lsKey2)
@@ -204,13 +207,23 @@ function handleUpdate(e) {
       return
     }
 
+    const subState = getSubState(id)
+
+    if (warnUpdateToDiscard && subState.designations.length > 1) {
+      if (
+        !confirm('All designations inside current edited designation will be discarded. Accept that and update it anyway?')
+      ) return e.preventDefault()
+
+      warnUpdateToDiscard = false
+    }
+
     const { start, end } = designation
     const shift = text.length - designation.text.length
 
     for (let i = designations.length - 1; i >= 0; i--) {
       const d = designations[i]
 
-      if (d.start >= start && d.end <= end && (d.start != start || d.end != end)) {
+      if (d.start >= start && d.end <= end && d.id != id) {
         designations.splice(i, 1)
       }
     }
