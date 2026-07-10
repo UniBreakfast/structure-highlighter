@@ -97,7 +97,7 @@ function prepareTemplates() {
   }
 }
 
-function preparePalette(list, key, value) {
+function preparePalette(list, key, value = '') {
   const input = list.parentElement.querySelector('div>input')
   const labels = palette[key]
   const items = labels.map(label => {
@@ -115,7 +115,7 @@ function preparePalette(list, key, value) {
   input.type = key == 'colors' ? 'color' : 'text'
   input.value = key == 'colors' ? '#ffffff' : ''
 
-  if (!labels.includes(value)) input.value = value
+  if (value && !labels.includes(value)) input.value = value
 }
 
 function handleMainView(e) {
@@ -333,21 +333,32 @@ function handleSelectValue(e) {
 
 function handleAddToPalette(e) {
   const btn = e.target
+  const form = btn.closest('form')
+  const key = form.key.value
+
+  if (btn.value == 'hints') return alert(
+`► Add ${key} to palette to easily use more than once.
+► Select one to use it.
+► Hover over it and press Up/Down to reorder.
+► Right click to discard one.
+`
+)
 
   if (btn.value != 'add') return
 
   const input = btn.previousElementSibling
-  const form = input.closest('form')
   const list = form.querySelector('ul')
-  const key = form.key.value
   const arr = palette[key]
   const value = input.value.trim()
 
-  if (!value || arr.includes(value)) return
+  if (!value) return alert(`Cannot add empty ${key}.`)
+
+  if (arr.includes(value)) return alert(`Cannot add duplicate ${key} and this one already exists.`)
 
   arr.push(value)
   savePalette()
   preparePalette(list, key)
+  list.lastElementChild.scrollIntoView()
   form.reset()
 }
 
