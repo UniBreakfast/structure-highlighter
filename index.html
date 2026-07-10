@@ -19,7 +19,7 @@
   <main>
     <form action="javascript:">
       <textarea name="text" readonly hidden></textarea>
-      
+
       <div>
         <button value="edit">Edit</button>
         <button value="designate">Designate selected</button>
@@ -29,7 +29,7 @@
         <button value="import-state" title="Import content with designations from JSON file">⇧ content</button>
         <button value="import-palette" title="Import palette from JSON file">⇧ palette</button>
       </div>
-      
+
       <pre><code></code></pre>
 
       <div>
@@ -39,7 +39,7 @@
   </main>
 
   <template title="sub-view">
-    <dialog class="sub-view">
+    <dialog>
       <form method="dialog">
         <input type="hidden" name="id">
         <textarea name="text" readonly hidden></textarea>
@@ -52,7 +52,7 @@
         <pre><code></code></pre>
 
         <p><output name="kindrole"></output></p>
-        
+
         <div>
           <button value="delete">Delete designation</button>
           <button value="cancel">Cancel</button>
@@ -63,12 +63,12 @@
   </template>
 
   <template title="designate">
-    <dialog class="designate">
+    <dialog>
       <form method="dialog">
         <input type="hidden" name="start">
         <input type="hidden" name="end">
         <textarea name="text" hidden></textarea>
-        
+
         <pre><code></code></pre>
 
         <div>
@@ -105,11 +105,11 @@
   </template>
 
   <template title="edit">
-    <dialog class="edit">
+    <dialog>
       <form method="dialog">
         <input type="hidden" name="id">
         <textarea name="text" rows="8" cols="50"></textarea>
-        
+
         <div>
           <label>
             <span>Kind:</span>
@@ -144,9 +144,28 @@
   </template>
 
   <template title="select">
-    <dialog class="select">
+    <dialog>
       <form method="dialog">
         <ul></ul>
+
+        <div>
+          <button value="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+  </template>
+
+  <template title="palette">
+    <dialog>
+      <form method="dialog">
+        <input type="hidden" name="key">
+
+        <ul></ul>
+
+        <div>
+          <input type="text">
+          <button type="button" value="add">Add</button>
+        </div>
 
         <div>
           <button value="cancel">Cancel</button>
@@ -161,25 +180,6 @@
         <pre><code></code></pre>
       </button>
     </li>
-  </template>
-
-  <template title="labels">
-    <dialog class="labels">
-      <form method="dialog">
-        <input type="hidden" name="key">
-        
-        <ul></ul>
-        
-        <div>
-          <input type="text">
-          <button type="button" value="add">Add</button>
-        </div>
-
-        <div>
-          <button value="cancel">Cancel</button>
-        </div>
-      </form>
-    </dialog>
   </template>
 </body>
 

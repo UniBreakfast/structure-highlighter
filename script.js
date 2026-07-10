@@ -17,9 +17,9 @@ mainView.onsubmit = handleMainView
 templates.edit.onsubmit = handleUpdate
 templates.select.onsubmit = handleSelect
 templates.designate.onsubmit = handleDesignate
-templates.labels.onclick = handleAddToPalette
-templates.labels.onkeydown = handleAdjustPalette
-templates.labels.oncontextmenu = handleRemoveFromPalette
+templates.palette.onclick = handleAddToPalette
+templates.palette.onkeydown = handleAdjustPalette
+templates.palette.oncontextmenu = handleRemoveFromPalette
 
 loadPalette()
 loadDesignations()
@@ -85,13 +85,16 @@ function prepareTemplates() {
 
   for (const template of templateElements) {
     const { title } = template
+    const element = template.content.firstElementChild
 
-    templates[title] = template.content.firstElementChild
+    templates[title] = element
     template.remove()
+
+    if (element.matches('dialog')) element.className = title
   }
 }
 
-function preparePalette(list, key) {
+function preparePalette(list, key, value) {
   const input = list.parentElement.querySelector('div>input')
   const labels = palette[key]
   const items = labels.map(label => {
@@ -108,6 +111,8 @@ function preparePalette(list, key) {
   list.classList.toggle('colors', key == 'colors')
   input.type = key == 'colors' ? 'color' : 'text'
   input.value = key == 'colors' ? '#ffffff' : ''
+
+  if (!labels.includes(value)) input.value = value
 }
 
 function handleMainView(e) {
@@ -299,7 +304,7 @@ function handleSelectValue(e) {
   const input = btn.previousElementSibling
   const { name } = input
 
-  showDialog('labels', { input, name })
+  showDialog('palette', { input, name })
 }
 
 function handleAddToPalette(e) {
@@ -446,12 +451,12 @@ function showDialog(type, props) {
     form.end.value = end
     form.text.value = text
     code.innerHTML = subStateToMarkup({ text })
-  } else if (type == 'labels') {
+  } else if (type == 'palette') {
     const { input, name } = props
     const form = dialog.querySelector('form')
     const ul = form.querySelector('ul')
 
-    preparePalette(ul, name + 's')
+    preparePalette(ul, name + 's', input.value)
 
     form.key.value = name + 's'
     form.onsubmit = (e) => {
