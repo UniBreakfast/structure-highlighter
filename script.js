@@ -275,6 +275,8 @@ function handleUpdate(e) {
 }
 
 function handleDelete(e) {
+  if (!confirm('Are you sure you want to discard this designation? The text will remain.')) return e.preventDefault()
+  
   const form = e.target.closest('form')
   const id = form.id.value
   const index = state.designations.findIndex(d => d.id == id)
@@ -415,6 +417,9 @@ function handleRemoveFromPalette(e) {
 
 function listAllDesignations() {
   const designations = state.designations.toSorted((a, b) => (a.start - b.start) || (b.end - a.end))
+
+  if (!designations.length) return alert('No designations found. Make some by selecting and designating some textual fragments.')
+  
   const ids = designations.map(d => d.id)
   const subStates = ids.map(getSubState)
 
