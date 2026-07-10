@@ -186,7 +186,7 @@ function handleUpdate(e) {
 
   const form = e.target
   const id = form.id.value
-  const text = form.text.value.trim()
+  const text = form.text.value
   const { designations } = state
 
   if (id) {
