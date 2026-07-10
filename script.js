@@ -194,11 +194,19 @@ function handleUpdate(e) {
 
   if (id) {
     const designation = designations.find(d => d.id == id)
+    const kind = form.kind.value.trim()
+    const role = form.role.value.trim()
+    const colored = form.colored.checked
 
-    designation.kind = form.kind.value.trim()
-    designation.role = form.role.value.trim()
-    designation.color =
-      form.colored.checked ? form.color.value : ''
+    if (!kind && !role && !colored) {
+      e.preventDefault()
+
+      return alert('Designation must have at least some characteristic (kind, role or color).')
+    }
+
+    designation.kind = kind
+    designation.role = role
+    designation.color = colored ? form.color.value : ''
 
     if (text == designation.text) {
       saveDesignations()
@@ -209,9 +217,11 @@ function handleUpdate(e) {
 
     const subState = getSubState(id)
 
+    if (!text && !confirm('Empty designation will be discarded. Do you confirm?')) return e.preventDefault()
+    
     if (warnUpdateToDiscard && subState.designations.length > 1) {
       if (
-        !confirm('All designations inside current edited designation will be discarded. Accept that and update it anyway?')
+        !confirm('All designations inside current edited designation will be discarded. Accept that and proceed anyway?')
       ) return e.preventDefault()
 
       warnUpdateToDiscard = false
