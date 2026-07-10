@@ -301,6 +301,9 @@ function handleDesignate(e) {
   const role = form.role.value.trim()
   const colored = form.colored.checked
   const color = colored ? form.color.value : ''
+
+  if (!kind && !role && !colored) return alert('Designation must have at least some characteristic (kind, role or color).')
+  
   const designation = { id, start, end, text, kind, role, color }
 
   state.designations.push(designation)
