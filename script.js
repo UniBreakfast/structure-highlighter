@@ -146,6 +146,8 @@ function handleToggleColor(e) {
 }
 
 function handleClick(e) {
+  if (e.target.matches('dialog')) e.target.close()
+  
   if (
     e.target.matches('button')
   ) {
@@ -192,10 +194,11 @@ async function handleUpdate(e) {
   e.preventDefault()
 
   const btn = e.submitter
-
-  if (btn.value != 'update') return
-
   const form = e.target
+  const dialog = form.closest('dialog')
+
+  if (btn.value != 'update') return dialog.close()
+
   const id = form.id.value
   const text = form.text.value
   const { designations } = state
@@ -223,7 +226,7 @@ async function handleUpdate(e) {
       saveDesignations()
       fillAllViews()
 
-      return form.parentElement.close()
+      return dialog.close()
     }
 
     const subState = getSubState(id)
@@ -288,7 +291,7 @@ async function handleUpdate(e) {
 
   saveDesignations()
   fillAllViews()
-  form.parentElement.close()
+  dialog.close()
 }
 
 async function handleDelete(e) {
@@ -300,13 +303,14 @@ async function handleDelete(e) {
   )) return
 
   const form = e.target.closest('form')
+  const dialog = form.closest('dialog')
   const id = form.id.value
   const index = state.designations.findIndex(d => d.id == id)
 
   state.designations.splice(index, 1)
   saveDesignations()
   fillAllViews()
-  form.parentElement.close()
+  dialog.close()
 }
 
 function handleCreate(e) {
@@ -376,6 +380,8 @@ function handleSelectValue(e) {
 }
 
 function handleAddToPalette(e) {
+  if (!e.target.matches('button')) return
+  
   const btn = e.target
   const form = btn.closest('form')
   const key = form.key.value
@@ -704,33 +710,26 @@ function calcOffset(startNode, node, nodeOffset) {
   return range.toString().length
 }
 
-function exportData(data) {
-  const a = document.createElement('a')
+async function exportData(data) {
+  const handle = await showSaveFilePicker({
+    suggestedName: 'data.json',
+    types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+  })
+  const writable = await handle.createWritable()
 
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }))
-  a.download = 'data.json'
-  a.click()
+  await writable.write(JSON.stringify(data, null, 2))
+  await writable.close()
 }
 
-function importData(data) {
-  const input = document.createElement('input')
+async function importData(data) {
+  const [handle] = await showOpenFilePicker({
+    types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+  })
+  const file = await handle.getFile()
 
-  input.type = 'file'
-  input.accept = 'application/json'
-  input.onchange = () => {
-    const reader = new FileReader()
-    const file = input.files[0]
+  Object.assign(data, JSON.parse(await file.text()))
 
-    if (!file) return
+  ;(data == state ? saveDesignations : savePalette)()
 
-    reader.onload = () => {
-      Object.assign(data, JSON.parse(reader.result)),
-        (data == state ? saveDesignations : savePalette)()
-      if (data == state) fill(mainView, state)
-    }
-
-    reader.readAsText(file)
-  }
-
-  input.click()
+  if (data == state) fill(mainView, state)
 }

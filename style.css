@@ -15,6 +15,7 @@ ul {
 form {
   display: grid;
   gap: 5px;
+  padding: 1em;
 }
 
 main>form>div>button {
@@ -29,6 +30,13 @@ button {
 dialog {
   border-radius: 10px;
   max-width: 82vw;
+  padding: 0;
+  border: none;
+}
+
+dialog>form {
+  border-radius: 10px;
+  border: 3px solid black;
 }
 
 form>pre {

@@ -1,0 +1,149 @@
+{
+  "text": "function handleToggleColor(e) {\n  const box = e.target\n\n  if (!box.matches(':has(~[type=color])')) return\n\n  const input = box.nextElementSibling.nextElementSibling\n  const btn = input.nextElementSibling\n\n  input.disabled = btn.disabled = !box.checked\n}",
+  "designations": [
+    {
+      "id": "85c8e15d-b782-40e2-973a-c71218fb262c",
+      "start": 0,
+      "end": 253,
+      "text": "function handleToggleColor(e) {\n  const box = e.target\n\n  if (!box.matches(':has(~[type=color])')) return\n\n  const input = box.nextElementSibling.nextElementSibling\n  const btn = input.nextElementSibling\n\n  input.disabled = btn.disabled = !box.checked\n}",
+      "kind": "statement",
+      "role": "classic function literal, function declaration",
+      "color": ""
+    },
+    {
+      "id": "018df573-3f72-4b6b-9c6f-352a6b9e1f05",
+      "start": 0,
+      "end": 8,
+      "text": "function",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "e108ff09-ec25-42d7-b92c-f168a9e59ad2",
+      "start": 9,
+      "end": 26,
+      "text": "handleToggleColor",
+      "kind": "identifier",
+      "role": "function name provider",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "3e4085e6-3b3e-46e0-9e93-e77ffb311a10",
+      "start": 27,
+      "end": 28,
+      "text": "e",
+      "kind": "identifier",
+      "role": "parameter name provider",
+      "color": "#c7fbff"
+    },
+    {
+      "id": "2c94bac3-d722-4f14-a199-cb428b9d80cf",
+      "start": 46,
+      "end": 47,
+      "text": "e",
+      "kind": "identifier",
+      "role": "property source provider, parameter name provider",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "ea6cbff3-8693-4998-80fc-8efd4de385c1",
+      "start": 34,
+      "end": 54,
+      "text": "const box = e.target",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "d1a681d7-1561-461c-af5e-f2ef9c13351b",
+      "start": 109,
+      "end": 164,
+      "text": "const input = box.nextElementSibling.nextElementSibling",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "60b347c2-a2f1-4f62-a31e-940498e6b64f",
+      "start": 167,
+      "end": 203,
+      "text": "const btn = input.nextElementSibling",
+      "kind": "statement",
+      "role": "constant declaration",
+      "color": ""
+    },
+    {
+      "id": "984fb911-4af6-4ada-80b4-fa1df35ee450",
+      "start": 58,
+      "end": 105,
+      "text": "if (!box.matches(':has(~[type=color])')) return",
+      "kind": "statement",
+      "role": "conditional if statement",
+      "color": ""
+    },
+    {
+      "id": "b8674b8b-ebd7-4167-a521-a58ece8aeb85",
+      "start": 207,
+      "end": 251,
+      "text": "input.disabled = btn.disabled = !box.checked",
+      "kind": "expression",
+      "role": "assignment expression",
+      "color": ""
+    },
+    {
+      "id": "b9ea1351-5790-4677-8fc3-f83dea5697e7",
+      "start": 34,
+      "end": 39,
+      "text": "const",
+      "kind": "keyword",
+      "role": "",
+      "color": "#ff80e8"
+    },
+    {
+      "id": "b7504869-6770-4ee1-9b46-b8667b3feab4",
+      "start": 40,
+      "end": 43,
+      "text": "box",
+      "kind": "identifier",
+      "role": "constant name provider",
+      "color": "#adc6ff"
+    },
+    {
+      "id": "3c899294-be8b-4335-ace0-032f87c4e383",
+      "start": 48,
+      "end": 54,
+      "text": "target",
+      "kind": "identifier",
+      "role": "property name provider",
+      "color": "#c7fbff"
+    },
+    {
+      "id": "d8a480e8-959f-4dfb-b8bd-d281641e48a5",
+      "start": 44,
+      "end": 45,
+      "text": "=",
+      "kind": "operator",
+      "role": "assignment operator",
+      "color": ""
+    },
+    {
+      "id": "b6edf836-4b3d-4145-856f-6e6ed8338845",
+      "start": 46,
+      "end": 54,
+      "text": "e.target",
+      "kind": "expression",
+      "role": "property reading expression, constant value provider",
+      "color": ""
+    },
+    {
+      "id": "2d36bdd7-c3be-4f1b-a9dc-3b3f1ce274a3",
+      "start": 47,
+      "end": 48,
+      "text": ".",
+      "kind": "dot operator",
+      "role": "property accessor",
+      "color": ""
+    }
+  ]
+}
